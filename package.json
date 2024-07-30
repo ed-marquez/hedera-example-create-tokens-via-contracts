@@ -1,0 +1,30 @@
+{
+	"name": "hedera-example-create-tokens-via-contracts",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@nomicfoundation/hardhat-chai-matchers": "^2.0.7",
+		"@nomicfoundation/hardhat-foundry": "^1.1.2",
+		"@nomicfoundation/hardhat-toolbox": "^5.0.0",
+		"@openzeppelin/hardhat-upgrades": "^3.2.0",
+		"hardhat": "^2.22.6",
+		"hardhat-abi-exporter": "^2.10.1",
+		"mocha-junit-reporter": "^2.2.1",
+		"mocha-multi-reporters": "^1.5.1"
+	},
+	"dependencies": {
+		"@hashgraph/sdk": "^2.48.1",
+		"dotenv": "^16.4.5",
+		"ethers": "^6.13.1"
+	},
+	"directories": {
+		"test": "test"
+	}
+}
