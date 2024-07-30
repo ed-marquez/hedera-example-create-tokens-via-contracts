@@ -39,11 +39,6 @@ describe("HTS token creation via contract interfaces", function () {
 	const myContractAddress = "0x02abfe8f63f7b2a09bb11327533aa7b438f45edf"; // 0.0.4542295
 	const gasLimit = 8000000; // Set your desired gas limit
 
-	// Amounts and serial numbers to approve and spend
-	const hbarAmount = new Hbar(1); // Amount of HBAR to approve and transfer
-	const ftAmount = BigInt(10); // Amount of fungible tokens to approve and transfer
-	const nftSerialToSpend = BigInt(5); // Serial # of NFT to approve and transfer
-
 	before(async function () {
 		console.log(`- Checking accounts and setting up HTS tokens for test cases...\n`);
 
@@ -55,10 +50,10 @@ describe("HTS token creation via contract interfaces", function () {
 		// Define KeyValue instances
 		callerAccountKeyValue = {
 			inheritAccountKey: true,
-			contractId: "0x0000000000000000000000000000000000000000",
+			contractId: ethers.ZeroAddress,
 			ed25519: "0x",
 			ECDSA_secp256k1: "0x",
-			delegatableContractId: "0x0000000000000000000000000000000000000000",
+			delegatableContractId: ethers.ZeroAddress,
 		};
 
 		contractAddressKeyValue = {
@@ -66,7 +61,7 @@ describe("HTS token creation via contract interfaces", function () {
 			contractId: myContractAddress,
 			ed25519: "0x",
 			ECDSA_secp256k1: "0x",
-			delegatableContractId: "0x0000000000000000000000000000000000000000",
+			delegatableContractId: ethers.ZeroAddress,
 		};
 
 		ecdsaPvKey = PrivateKey.generateECDSA();
@@ -75,10 +70,10 @@ describe("HTS token creation via contract interfaces", function () {
 		console.log(`\n- ECDSA public key: ${ecdsaPbKey}`);
 		ecdsaKeyValue = {
 			inheritAccountKey: false,
-			contractId: "0x0000000000000000000000000000000000000000",
+			contractId: ethers.ZeroAddress,
 			ed25519: "0x",
 			ECDSA_secp256k1: ecdsaPbKey,
-			delegatableContractId: "0x0000000000000000000000000000000000000000",
+			delegatableContractId: ethers.ZeroAddress,
 		};
 
 		ed25519PvKey = PrivateKey.generateED25519();
@@ -87,10 +82,10 @@ describe("HTS token creation via contract interfaces", function () {
 		console.log(`- ED25519 public key: ${ed25519PbKey}`);
 		ed25519KeyValue = {
 			inheritAccountKey: false,
-			contractId: "0x0000000000000000000000000000000000000000",
+			contractId: ethers.ZeroAddress,
 			ed25519: ed25519PbKey,
 			ECDSA_secp256k1: "0x",
-			delegatableContractId: "0x0000000000000000000000000000000000000000",
+			delegatableContractId: ethers.ZeroAddress,
 		};
 	});
 
@@ -215,9 +210,6 @@ describe("HTS token creation via contract interfaces", function () {
 			value: payableHbarAmount, // Include the payable amount here
 			gasLimit: gasLimit,
 		});
-		// const atomicTransferTx = await treasuryIHederaTokenService.createFungibleTokenWithCustomFees();
-		// const atomicTransferTx = await treasuryIHederaTokenService.createNonFungibleToken(cryptoTransfers, tokenTransferList);
-		// const atomicTransferTx = await treasuryIHederaTokenService.createNonFungibleTokenWithCustomFees(cryptoTransfers, tokenTransferList);
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
 		console.log(`\n- Hash for token create transaction: \n${txHash}`);
@@ -311,8 +303,6 @@ describe("HTS token creation via contract interfaces", function () {
 				gasLimit: gasLimit,
 			}
 		);
-		// const atomicTransferTx = await treasuryIHederaTokenService.createNonFungibleToken(cryptoTransfers, tokenTransferList);
-		// const atomicTransferTx = await treasuryIHederaTokenService.createNonFungibleTokenWithCustomFees(cryptoTransfers, tokenTransferList);
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
 		console.log(`\n- Hash for token create transaction: \n${txHash}`);
