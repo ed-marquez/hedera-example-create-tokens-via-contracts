@@ -1,23 +1,53 @@
-# Sample Hardhat Project
+# Create HTS Tokens Via Smart Contracts
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a Hardhat Ignition module that deploys that contract.
+This repository demonstrates how to create Hedera Token Service (HTS) tokens via smart contracts.
 
-Try running some of the following tasks:
+## Try It on the Browser:
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat ignition deploy ./ignition/modules/Lock.js
-```
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/?autostart=true#https://github.com/ed-marquez/hedera-example-create-tokens-via-contracts)
 
-Hedera tokens can have three types of custom fees:
+## Try It Locally:
 
-Fixed Fee: A set amount transferred to a fee collector account each time the token is transferred, payable in HBAR or another Hedera token (but not NFTs). Fixed Fees can apply to both fungible and non-fungible tokens.
+### Prerequisites
 
-Fractional Fee: A percentage of the transferred tokens, with optional minimum and maximum limits. The sender or receiver can be designated to pay this fee. Fractional Fees apply only to fungible tokens.
+- Node.js
+- npm
+- A Hedera account with ECDSA credentials
 
-Royalty Fee: A fraction of the value exchanged for an NFT, or a fallback fixed fee if no value is exchanged. Royalty Fees are specific to non-fungible tokens (NFTs).
+### Instructions
 
-Each token can have up to 10 custom fees, and fee collectors can be exempted from paying these fees.
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ed-marquez/hedera-example-create-tokens-via-contracts.git
+   cd hedera-example-create-tokens-via-contracts
+   ```
+2. **Rename the `example.env` file to `.env` and enter the ECDSA credentials for the 3 accounts needed**:
+   ```bash
+   mv example.env .env
+   ```
+3. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+4. **Run the test script:**:
+   ```bash
+   npx hardhat test
+   ```
+
+## Project Structure
+
+- `.env`: Environment variables file (be sure to rename `example.env` to `.env` and fill in your credentials).
+- `constants.js`: Contains constants and network configurations.
+- `hardhat.config.js`: Hardhat configuration file.
+- `createAccountManagedTokens.test.js`: Contains the test script for creating the account-managed HTS tokens via the Hedera System Contracts.
+
+## Flow Description
+
+1. **Initialize Environment Variables**:
+   - Rename `example.env` to `.env` and fill in your ECDSA account credentials.
+2. **Use Environment Variables**:
+   - The credentials from `.env` are used in `constants.js`.
+3. **Configure Hardhat**:
+   - The constants from `constants.js` are used in `hardhat.config.js` for network and account configuration.
+4. **Run Tests**:
+   - Tests in `createAccountManagedTokens.test.js` create fungible tokens (FT) and non-fungible tokens (NFT).

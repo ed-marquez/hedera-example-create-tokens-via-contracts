@@ -38,6 +38,7 @@ describe("HTS token creation via contract interfaces", function () {
 	// HTS system contract address and gas limit
 	const htsSystemContractAddress = "0x0000000000000000000000000000000000000167";
 	const myContractAddress = "0x02abfe8f63f7b2a09bb11327533aa7b438f45edf"; // 0.0.4542295
+	const payableHbarAmount = ethers.parseUnits("35", "ether");
 	const gasLimit = 6500000; // Set your desired gas limit
 
 	before(async function () {
@@ -125,7 +126,7 @@ describe("HTS token creation via contract interfaces", function () {
 		];
 	});
 
-	it("1. Should create an immutable fungible HTS token via IHederaTokenService/HederaTokenService that has NO custom fixed/fractional fees and NO keys", async function () {
+	it("1. Should create an immutable fungible HTS token via IHederaTokenService/HederaTokenService that has NO custom fixed or fractional fees and NO keys", async function () {
 		const supply = 100;
 		const myImmutableFungibleToken = {
 			name: "myImmutableFungibleToken",
@@ -145,9 +146,6 @@ describe("HTS token creation via contract interfaces", function () {
 		const initialTotalSupply = supply;
 		const decimals = 0;
 
-		// Define the payable amount (in wei)
-		const payableHbarAmount = ethers.parseUnits("40", "ether");
-
 		// Execute the token create
 		const treasuryIHederaTokenService = await ethers.getContractAt(IHederaTokenServiceABI, htsSystemContractAddress, treasurySigner);
 		const tokenCreateTx = await treasuryIHederaTokenService.createFungibleToken(myImmutableFungibleToken, initialTotalSupply, decimals, {
@@ -156,11 +154,14 @@ describe("HTS token creation via contract interfaces", function () {
 		});
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
-		console.log(`\n- Hash for token create transaction: \n${txHash}`);
+		ftTokenAddress = tokenCreateRx.contractAddress;
+		console.log(`\n- Token address: \n${ftTokenAddress}`);
+		console.log(`- See: https://hashscan.io/${network}/token/${ftTokenAddress}`);
+		console.log(`- Hash for token create transaction: \n${txHash}`);
 		console.log(`- See: https://hashscan.io/${network}/transaction/${txHash}`);
 	});
 
-	it("2. Should create a fungible HTS token via IHederaTokenService/HederaTokenService that has custom fixed/fractional fees and ECDSA/ED25519/contract address keys", async function () {
+	it("2. Should create a fungible HTS token via IHederaTokenService/HederaTokenService that has custom fixed & fractional fees and ECDSA/ED25519/contract address keys", async function () {
 		// Define TokenKey instances
 		const adminKey = {
 			keyType: 1, // adminKey
@@ -209,9 +210,6 @@ describe("HTS token creation via contract interfaces", function () {
 		const initialTotalSupply = 10;
 		const decimals = 0;
 
-		// Define the payable amount (in wei)
-		const payableHbarAmount = ethers.parseUnits("40", "ether");
-
 		// Execute the token create
 		const treasuryIHederaTokenService = await ethers.getContractAt(IHederaTokenServiceABI, htsSystemContractAddress, treasurySigner);
 		const tokenCreateTx = await treasuryIHederaTokenService.createFungibleTokenWithCustomFees(
@@ -227,11 +225,14 @@ describe("HTS token creation via contract interfaces", function () {
 		);
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
-		console.log(`\n- Hash for token create transaction: \n${txHash}`);
+		ftTokenAddress = tokenCreateRx.contractAddress;
+		console.log(`\n- Token address: \n${ftTokenAddress}`);
+		console.log(`- See: https://hashscan.io/${network}/token/${ftTokenAddress}`);
+		console.log(`- Hash for token create transaction: \n${txHash}`);
 		console.log(`- See: https://hashscan.io/${network}/transaction/${txHash}`);
 	});
 
-	it("3. Should create an non-fungible HTS token via IHederaTokenService/HederaTokenService that has NO custom fixed/fractional fees and NO keys (other than supply key to mint/burn NFTs)", async function () {
+	it("3. Should create an non-fungible HTS token via IHederaTokenService/HederaTokenService that has NO custom fixed or royalty fees and NO keys (other than supply key to mint/burn NFTs)", async function () {
 		const supplyKey = {
 			keyType: 16, // supplyKey
 			key: callerAccountKeyValue,
@@ -253,9 +254,6 @@ describe("HTS token creation via contract interfaces", function () {
 			},
 		};
 
-		// Define the payable amount (in wei)
-		const payableHbarAmount = ethers.parseUnits("40", "ether");
-
 		// Execute the token create
 		const treasuryIHederaTokenService = await ethers.getContractAt(IHederaTokenServiceABI, htsSystemContractAddress, treasurySigner);
 		const tokenCreateTx = await treasuryIHederaTokenService.createNonFungibleToken(MyImmutableNonFungibleToken, {
@@ -264,11 +262,14 @@ describe("HTS token creation via contract interfaces", function () {
 		});
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
-		console.log(`\n- Hash for token create transaction: \n${txHash}`);
+		nftTokenAddress = tokenCreateRx.contractAddress;
+		console.log(`\n- Token address: \n${nftTokenAddress}`);
+		console.log(`- See: https://hashscan.io/${network}/token/${nftTokenAddress}`);
+		console.log(`- Hash for token create transaction: \n${txHash}`);
 		console.log(`- See: https://hashscan.io/${network}/transaction/${txHash}`);
 	});
 
-	it("4. Should create a non-fungible HTS token via IHederaTokenService/HederaTokenService that has custom fixed/fractional fees and ECDSA/ED25519/contract address keys", async function () {
+	it("4. Should create a non-fungible HTS token via IHederaTokenService/HederaTokenService that has custom fixed and royalty fees and ECDSA/ED25519/contract address keys", async function () {
 		// Define TokenKey instances
 		const adminKey = {
 			keyType: 1, // adminKey
@@ -315,9 +316,6 @@ describe("HTS token creation via contract interfaces", function () {
 			},
 		};
 
-		// Define the payable amount (in wei)
-		const payableHbarAmount = ethers.parseUnits("40", "ether");
-
 		// Execute the token create
 		const treasuryIHederaTokenService = await ethers.getContractAt(IHederaTokenServiceABI, htsSystemContractAddress, treasurySigner);
 		const tokenCreateTx = await treasuryIHederaTokenService.createNonFungibleTokenWithCustomFees(MyNonFungibleToken, fixedFee, royaltyFee, {
@@ -326,7 +324,10 @@ describe("HTS token creation via contract interfaces", function () {
 		});
 		const tokenCreateRx = await tokenCreateTx.wait();
 		const txHash = tokenCreateRx.hash;
-		console.log(`\n- Hash for token create transaction: \n${txHash}`);
+		nftTokenAddress = tokenCreateRx.contractAddress;
+		console.log(`\n- Token address: \n${nftTokenAddress}`);
+		console.log(`- See: https://hashscan.io/${network}/token/${nftTokenAddress}`);
+		console.log(`- Hash for token create transaction: \n${txHash}`);
 		console.log(`- See: https://hashscan.io/${network}/transaction/${txHash}`);
 	});
 });
